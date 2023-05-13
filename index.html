@@ -29,7 +29,7 @@
                     <h2>Search For a City</h2>
                     <form id="city-form" class="card-body">
                         <div class="d-grid gap-2">
-                            <input name="city" id="city" type="text" autofocus="true" class="form-input"
+                            <input name="city" id="city-name" type="text" autofocus="true" class="form-input"
                                 placeholder="Toronto" />
                             <button type="submit" class="btn btn-dark" id="search-button">Search</button>
                         </div>
@@ -48,11 +48,11 @@
         </section>
         <section class="col">
             <!-- Current Temperature Section Starts -->
-            <div class="current-weather"> </div>
+            <div id="current-weather-container"> </div>
             <!-- Current Temperature Section Ends-->
 
             <!-- Five Day Forecast Section Starts -->
-            <div class="forecast-container"></div>
+            <div id="forecast-container"></div>
             <!-- Five Day Forecast Section Ends-->
         </section>
     </main>
