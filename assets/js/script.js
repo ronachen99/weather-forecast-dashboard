@@ -2,12 +2,13 @@
 // Global Variables
 //-----------------------------------------------------------------------------------------------------------------------------//
 var APIKey = '187b46953877ee25caa3c164a82a38f2';
+var iconURL = 'https://openweathermap.org/img/wn/';
 var cityFormEl = document.getElementById('city-form');
 var cityNameEl = document.getElementById('city-name');
 var clearButtonEl = document.getElementById('clear-button');
 var historyContainerEl = document.getElementById('history-container');
 var weatherContainerEl = document.getElementById('weather-container');
-var searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];  
+var searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
 //-----------------------------------------------------------------------------------------------------------------------------//
 // Render History: call the create button function to create the buttons that are stored in the local storage
 //-----------------------------------------------------------------------------------------------------------------------------//
@@ -71,58 +72,63 @@ clearButtonEl.addEventListener("click", function () {
     location.reload();
 });
 //-----------------------------------------------------------------------------------------------------------------------------//
-// Weather Fetch: fetch data with API and create elements with the required data
+// Weather Fetch: fetch data with API and create elements for the current weather condition
 //-----------------------------------------------------------------------------------------------------------------------------//
 function weatherFetch(cityName) {
     var queryURL = 'http://api.openweathermap.org/data/2.5/weather?q=' + cityName + "&appid=" + APIKey + '&units=metric';
     fetch(queryURL)
-    .then(function (response) {
+        .then(function (response) {
             return response.json();
         })
         .then(function (data) {
+            var unix = data.dt_txt
+            var date = dayjs(unix).format('DD/MM/YYYY');
             if (data.message === 'city not found') {
-                console.log('not found');
+                alert("Please enter an existing city!");    
+            } else {
+                createSearchHistory(data.name);
+                var cardContainer = document.createElement('div');
+                var card = document.createElement('div');
+                var cityTitle = document.createElement('h3');
+                var icon = document.createElement('img');
+                var temp = document.createElement('li');
+                var wind = document.createElement('li');
+                var hum = document.createElement('li');
+
+                cardContainer.setAttribute('class', "card text-white bg-dark"); 
+                card.setAttribute("class", "card-body");
+                icon.setAttribute('src', iconURL + data.weather[0].icon + '.png');
+
+                cityTitle.textContent = data.name + ' (' + date + ')';
+                temp.textContent = 'Temperature: ' + data.main.temp + '°C';
+                wind.textContent = 'Wind: ' + data.wind.speed + ' m/s';
+                hum.textContent = 'Humidity: ' + data.main.humidity + '%' 
+
+                card.append(cityTitle, icon, temp, wind, hum);
+                cardContainer.append(card);
+                weatherContainerEl.append(cardContainer);
+            }
+        })
+}
+
+function forcastFetch(cityName) {
+    var queryURL = 'http://api.openweathermap.org/data/2.5/forecast?q=' + cityName + "&appid=" + APIKey + '&units=metric';
+    fetch(queryURL)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            var unix = data.dt_txt
+            var date = dayjs(unix).format('DD/MM/YYYY');
+            if (data.message === 'city not found') {
+                console.log("city does not exist");
             } else {
                 console.log(data);
-                createSearchHistory(data.name)
-                var cardContainer = document.createElement('div')
-                var card = document.createElement('div')
-                var cityTitle = document.createElement('h3')
-
-                cardContainer.setAttribute('class', "card text-white bg-dark")
-                card.setAttribute("class", "card-body")
-                
-                cityTitle.textContent = data.name
-                
-
-                card.append(cityTitle)
-                cardContainer.append(card)
-                
-                weatherContainerEl.append(cardContainer)
                 
 
             }
         })
-    }
-
-    function forcastFetch(cityName){
-        var queryURL = 'http://api.openweathermap.org/data/2.5/forecast?q=' + cityName + "&appid=" + APIKey + '&units=metric';
-        fetch(queryURL)
-        .then(function (response) {
-                return response.json();
-            })
-            .then(function (data) {
-                if (data.message === 'city not found') {
-                    console.log('not found');
-                } else {
-                    console.log(data);
-                    //    document.getElementById('current-city').textContent =data.name
-                  
-                    
-    
-                }
-            })
-    }
+}
 
 //-----------------------------------------------------------------------------------------------------------------------------//
 // Event Listeners
