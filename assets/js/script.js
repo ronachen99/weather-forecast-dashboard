@@ -2,72 +2,129 @@
 // Global Variables
 //-----------------------------------------------------------------------------------------------------------------------------//
 var APIKey = '187b46953877ee25caa3c164a82a38f2';
-var cityFormEl = document.querySelector('#city-form');
-var cityNameEl = document.querySelector('#city-name');
-var historyContainerEl = document.querySelector('#history-container');
+var cityFormEl = document.getElementById('city-form');
+var cityNameEl = document.getElementById('city-name');
+var clearButtonEl = document.getElementById('clear-button');
+var historyContainerEl = document.getElementById('history-container');
+var weatherContainerEl = document.getElementById('weather-container');
+var searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];  
 //-----------------------------------------------------------------------------------------------------------------------------//
-// Render History: read search history from the local storage or return an empty array ([]) if there aren't any searches
+// Render History: call the create button function to create the buttons that are stored in the local storage
 //-----------------------------------------------------------------------------------------------------------------------------//
 function renderHistory() {
-    searchHistory = localStorage.getItem('searchHistory');
-    if (searchHistory) {
-        searchHistory = JSON.parse(searchHistory);
-    } else {
-        searchHistory = [];
-    }
-    for (var x = 0; x < searchHistory.length; x++) {
-        createHistoryButtons(searchHistory[x]);
-    }
+    createHistoryButtons();
 }
 renderHistory();
 //-----------------------------------------------------------------------------------------------------------------------------//
-// Form Handler: submit search form when users enter a valid city name and save it to local storage
+// Form Handler: take in the city name from the input value
 //-----------------------------------------------------------------------------------------------------------------------------//
-function formSubmitHandler(event) {
+function formHandler(event) {
     event.preventDefault();
-
     var cityName = cityNameEl.value.trim();
-    searchHistory.push(cityName);
-    localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
-    getCityWeather(cityName);
-    createHistoryButtons(cityName);
+    runData(cityName);
     cityNameEl.value = '';
 }
-cityFormEl.addEventListener('submit', formSubmitHandler);
 //-----------------------------------------------------------------------------------------------------------------------------//
-// Create Buttons: create history buttons after form submission or from reading local storage
+// Run Data: run fetch data for live weather and forecast 
 //-----------------------------------------------------------------------------------------------------------------------------//
-function createHistoryButtons(cityName) {
-    var historyButton = document.createElement('button');
-    historyButton.classList.add('btn', 'btn-secondary', 'mb-3');
-    historyButton.setAttribute('type', 'button')
-    historyButton.innerHTML = cityName;
-    historyButton.addEventListener('click', getCityWeather(cityName));
-    historyContainerEl.appendChild(historyButton);
+function runData(city) {
+    weatherFetch(city);
+    forcastFetch(city);
 }
 //-----------------------------------------------------------------------------------------------------------------------------//
-// Clear Button: delete search history in local storage
+// History Click: fetch data for the city in the search history on click
 //-----------------------------------------------------------------------------------------------------------------------------//
-var clearButton = document.querySelector('#clear-button');
-clearButton.addEventListener("click", function () {
+function historyClick() {
+    runData(this.value);
+}
+//-----------------------------------------------------------------------------------------------------------------------------//
+// Create Search History: add cities that exist into the search history array, then save it into local storage
+//-----------------------------------------------------------------------------------------------------------------------------//
+function createSearchHistory(data) {
+    if (searchHistory.indexOf(data) !== -1) {
+        return;
+    }
+    searchHistory.push(data);
+    localStorage.setItem('searchHistory', JSON.stringify(searchHistory))
+    renderHistory();
+}
+//-----------------------------------------------------------------------------------------------------------------------------//
+// Create History Buttons: empty the history container, then create history buttons using the search history array
+//-----------------------------------------------------------------------------------------------------------------------------//
+function createHistoryButtons() {
+    historyContainerEl.innerHTML = ''
+    for (var x = 0; x < searchHistory.length; x++) {
+        var historyButton = document.createElement('button');
+        historyButton.setAttribute('class', 'btn btn-secondary mb-3');
+        historyButton.setAttribute('type', 'button')
+        historyButton.setAttribute('value', searchHistory[x])
+        historyButton.textContent = searchHistory[x];
+        historyButton.addEventListener('click', historyClick);
+        historyContainerEl.appendChild(historyButton);
+    }
+}
+//-----------------------------------------------------------------------------------------------------------------------------//
+// Clear Button: delete search history in the local storage
+//-----------------------------------------------------------------------------------------------------------------------------//
+clearButtonEl.addEventListener("click", function () {
     localStorage.removeItem('searchHistory');
     location.reload();
-  });
+});
 //-----------------------------------------------------------------------------------------------------------------------------//
-// Retrieve Weather Data:
+// Weather Fetch: fetch data with API and create elements with the required data
 //-----------------------------------------------------------------------------------------------------------------------------//
-function getCityWeather(cityName) {
+function weatherFetch(cityName) {
     var queryURL = 'http://api.openweathermap.org/data/2.5/weather?q=' + cityName + "&appid=" + APIKey + '&units=metric';
     fetch(queryURL)
-        .then(function (response) {
-            response.json();
+    .then(function (response) {
+            return response.json();
         })
-}
+        .then(function (data) {
+            if (data.message === 'city not found') {
+                console.log('not found');
+            } else {
+                console.log(data);
+                createSearchHistory(data.name)
+                var cardContainer = document.createElement('div')
+                var card = document.createElement('div')
+                var cityTitle = document.createElement('h3')
 
-// api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
-// api.openweathermap.org/data/2.5/forecast?q={city name}&appid={API key}
+                cardContainer.setAttribute('class', "card text-white bg-dark")
+                card.setAttribute("class", "card-body")
+                
+                cityTitle.textContent = data.name
+                
 
-// list.main.temp
-// list.main.humidity
-// list.wind.speed
-// list.weather.icon
+                card.append(cityTitle)
+                cardContainer.append(card)
+                
+                weatherContainerEl.append(cardContainer)
+                
+
+            }
+        })
+    }
+
+    function forcastFetch(cityName){
+        var queryURL = 'http://api.openweathermap.org/data/2.5/forecast?q=' + cityName + "&appid=" + APIKey + '&units=metric';
+        fetch(queryURL)
+        .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                if (data.message === 'city not found') {
+                    console.log('not found');
+                } else {
+                    console.log(data);
+                    //    document.getElementById('current-city').textContent =data.name
+                  
+                    
+    
+                }
+            })
+    }
+
+//-----------------------------------------------------------------------------------------------------------------------------//
+// Event Listeners
+//-----------------------------------------------------------------------------------------------------------------------------//
+cityFormEl.addEventListener('submit', formHandler);
