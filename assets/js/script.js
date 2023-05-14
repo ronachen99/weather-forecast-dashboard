@@ -46,7 +46,7 @@ function createHistoryButtons(cityName) {
     historyContainerEl.appendChild(historyButton);
 }
 //-----------------------------------------------------------------------------------------------------------------------------//
-// Create Buttons: create history buttons after form submission or from reading local storage
+// Clear Button: delete search history in local storage
 //-----------------------------------------------------------------------------------------------------------------------------//
 var clearButton = document.querySelector('#clear-button');
 clearButton.addEventListener("click", function () {
@@ -71,4 +71,3 @@ function getCityWeather(cityName) {
 // list.main.humidity
 // list.wind.speed
 // list.weather.icon
-
