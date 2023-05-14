@@ -29,6 +29,7 @@ function formHandler(event) {
 // Run Data: run fetch data for live weather and forecast 
 //-----------------------------------------------------------------------------------------------------------------------------//
 function runData(city) {
+    weatherContainerEl.innerHTML = '';
     weatherFetch(city);
     forcastFetch(city);
 }
@@ -82,11 +83,12 @@ function weatherFetch(cityName) {
         })
         .then(function (data) {
             var unix = data.dt_txt
-            var date = dayjs(unix).format('DD/MM/YYYY');
+            var date = dayjs(unix).format('MMMM D, YYYY');
             if (data.message === 'city not found') {
-                alert("Please enter an existing city!");    
+                alert('Please enter an existing city!');    
             } else {
                 createSearchHistory(data.name);
+                // Create elements for the current weather container
                 var cardContainer = document.createElement('div');
                 var card = document.createElement('div');
                 var cityTitle = document.createElement('h3');
@@ -95,15 +97,18 @@ function weatherFetch(cityName) {
                 var wind = document.createElement('li');
                 var hum = document.createElement('li');
 
-                cardContainer.setAttribute('class', "card text-white bg-dark"); 
-                card.setAttribute("class", "card-body");
+                // Set classess and retrieve icon
+                cardContainer.setAttribute('class', 'card text-white bg-dark'); 
+                card.setAttribute('class', 'card-body');
                 icon.setAttribute('src', iconURL + data.weather[0].icon + '.png');
 
+                // Create element text content 
                 cityTitle.textContent = data.name + ' (' + date + ')';
                 temp.textContent = 'Temperature: ' + data.main.temp + '°C';
                 wind.textContent = 'Wind: ' + data.wind.speed + ' m/s';
-                hum.textContent = 'Humidity: ' + data.main.humidity + '%' 
+                hum.textContent = 'Humidity: ' + data.main.humidity + '%';
 
+                // Append the elements
                 card.append(cityTitle, icon, temp, wind, hum);
                 cardContainer.append(card);
                 weatherContainerEl.append(cardContainer);
@@ -118,18 +123,60 @@ function forcastFetch(cityName) {
             return response.json();
         })
         .then(function (data) {
-            var unix = data.dt_txt
-            var date = dayjs(unix).format('DD/MM/YYYY');
             if (data.message === 'city not found') {
-                console.log("city does not exist");
+                console.log('city does not exist');
             } else {
                 console.log(data);
-                
+                // Create elements for the forecast container
+                var forecastCardContainer = document.createElement('div');
+                var forecastCard = document.createElement('div');
+                var forecastTitle = document.createElement('h3');
+                var fiveDaysContainer = document.createElement('div');
 
+                // Add class
+                forecastCardContainer.setAttribute('class', 'card border-dark');
+                forecastCard.setAttribute('class', 'card-body');
+                fiveDaysContainer.setAttribute('class', 'd-flex justify-content-evenly grid row');
+
+                // Add text content for h3
+                forecastTitle.textContent = 'Five Day Forecast';
+
+                // Append on the webpage
+                forecastCard.append(forecastTitle, fiveDaysContainer);
+                forecastCardContainer.append(forecastCard);
+                weatherContainerEl.append(forecastCardContainer);
+                
+                // For loop for creating the elements and data for the 5 day forecast 
+                for (var x = 0; x < 5; x++) {
+                var unix = data.list[x].dt_txt
+                var date = dayjs(unix).format('MMMM D, YYYY');
+                var dayContainer = document.createElement('div');
+                var dayBody = document.createElement('div');
+                var dayTitle = document.createElement('h4');
+                var dayIcon = document.createElement('img');
+                var dayTemp = document.createElement('li');
+                var dayWind = document.createElement('li');
+                var dayHum = document.createElement('li');
+                
+                // Add class and icon for each day container
+                dayContainer.setAttribute('class', 'col-2 card');
+                dayBody.setAttribute('class', 'card-body');
+                dayIcon.setAttribute('src', iconURL + data.list[x].weather[0].icon + '.png');
+                
+                // Modify text content with data
+                dayTitle.textContent = ' (' + date + ')';
+                dayTemp.textContent = 'Temperature: ' + data.list[x].main.temp + '°C';
+                dayWind.textContent = 'Wind: ' + data.list[x].wind.speed + ' m/s';
+                dayHum.textContent = 'Humidity: ' + data.list[x].main.humidity + '%';
+                
+                // Append the elements
+                dayBody.append(dayTitle, dayIcon, dayTemp, dayWind, dayHum);
+                dayContainer.append(dayBody);
+                fiveDaysContainer.append(dayContainer);
+              }
             }
         })
 }
-
 //-----------------------------------------------------------------------------------------------------------------------------//
 // Event Listeners
 //-----------------------------------------------------------------------------------------------------------------------------//
