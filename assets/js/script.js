@@ -8,7 +8,7 @@ var historyContainerEl = document.querySelector('#history-container');
 //-----------------------------------------------------------------------------------------------------------------------------//
 // Render History: read search history from the local storage or return an empty array ([]) if there aren't any searches
 //-----------------------------------------------------------------------------------------------------------------------------//
-function renderHistoryFromStorage() {
+function renderHistory() {
     searchHistory = localStorage.getItem('searchHistory');
     if (searchHistory) {
         searchHistory = JSON.parse(searchHistory);
@@ -19,7 +19,7 @@ function renderHistoryFromStorage() {
         createHistoryButtons(searchHistory[x]);
     }
 }
-renderHistoryFromStorage();
+renderHistory();
 //-----------------------------------------------------------------------------------------------------------------------------//
 // Form Handler: submit search form when users enter a valid city name and save it to local storage
 //-----------------------------------------------------------------------------------------------------------------------------//
@@ -45,6 +45,14 @@ function createHistoryButtons(cityName) {
     historyButton.addEventListener('click', getCityWeather(cityName));
     historyContainerEl.appendChild(historyButton);
 }
+//-----------------------------------------------------------------------------------------------------------------------------//
+// Create Buttons: create history buttons after form submission or from reading local storage
+//-----------------------------------------------------------------------------------------------------------------------------//
+var clearButton = document.querySelector('#clear-button');
+clearButton.addEventListener("click", function () {
+    localStorage.removeItem('searchHistory');
+    location.reload();
+  });
 //-----------------------------------------------------------------------------------------------------------------------------//
 // Retrieve Weather Data:
 //-----------------------------------------------------------------------------------------------------------------------------//
