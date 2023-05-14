@@ -21,14 +21,14 @@
         <h1>Weather Dashboard</h1>
     </header>
     <!-- Header Section Ends -->
-    <main class="row">
-        <section class="col">
+    <main class="row grid" style="--bs-gap: .25rem 1rem;">
+        <section class="col-4">
             <!-- Form Section Starts -->
-            <div class="card border-dark mb-3 w-50 d-flex text-center ">
-                <div class="card-body">
-                    <h2>Search For a City</h2>
-                    <form id="city-form" class="card-body">
-                        <div class="d-grid gap-2">
+            <div class="card border-dark">
+                <div class="card-body text-dark">
+                    <h2>City</h2>
+                    <form id="city-form">
+                        <div class="d-grid gap-2 ">
                             <input name="city" id="city-name" type="text" autofocus="true" class="form-input"
                                 placeholder="Toronto" />
                             <button type="submit" class="btn btn-dark" id="search-button">Search</button>
@@ -39,20 +39,84 @@
             <!-- Form Section Ends -->
 
             <!-- History Section Starts -->
-            <div class="card mb-3 w-50 d-flex text-center ">
-                <div class="history-container d-grid gap-2">
-                    <!-- <button type="button" class="btn btn-secondary">History City</button> History City Buttons Goes Here -->
+            <div class="card text-white bg-dark">
+                <div class="card-body">
+                    <h3>History</h3>
+                    <div class="history-container d-grid gap-2 col-6 mx-auto">
+                        <button type="button" class="btn btn-secondary mb-3">Example</button>
+                        <button type="button" class="btn btn-secondary mb-3">Example</button>
+                    </div>
                 </div>
             </div>
             <!-- History Section Ends -->
         </section>
-        <section class="col">
+        <section class="col-8">
             <!-- Current Temperature Section Starts -->
-            <div id="current-weather-container"> </div>
+            <div class="card text-white bg-dark">
+                <div id="current-weather-container" class="card-body">
+                    <h4 id="current-city">Example City</h4>
+                    <p id="today">Example Date</p>
+                    <img></img>
+                    <li>Temp: <span id="current-temp">Example Temp</span></li>
+                    <li>Wind: <span id="current-wind">Example Wind</span></li>
+                    <li>Temp: <span id="current-hum">Example Humidity</span></li>
+                </div>
+            </div>
             <!-- Current Temperature Section Ends-->
 
             <!-- Five Day Forecast Section Starts -->
-            <div id="forecast-container"></div>
+            <div class="card border-dark">
+                <div class="card-body">
+                    <h4>5 Day Forecast </h4>
+                    <div id="forecast-container" class="d-flex justify-content-evenly grid row ">
+                        <div class="col-2 card">
+                            <div id="first-day" class="card-body">
+                                <p id="date">Example Date</p>
+                                <img></img>
+                                <li>Temp: <span id="temp">Example Temp</span></li>
+                                <li>Wind: <span id="wind">Example Wind</span></li>
+                                <li>Temp: <span id="hum">Example Humidity</span></li>
+                            </div>
+                        </div>
+                        <div class="col-2 card">
+                            <div id="second-day" class="card-body">
+                                <p id="date">Example Date</p>
+                                <img></img>
+                                <li>Temp: <span id="temp">Example Temp</span></li>
+                                <li>Wind: <span id="wind">Example Wind</span></li>
+                                <li>Temp: <span id="hum">Example Humidity</span></li>
+                            </div>
+                        </div>
+                        <div class="col-2 card">
+                            <div id="third-day" class="card-body">
+                                <p id="date">Example Date</p>
+                                <img></img>
+                                <li>Temp: <span id="temp">Example Temp</span></li>
+                                <li>Wind: <span id="wind">Example Wind</span></li>
+                                <li>Temp: <span id="hum">Example Humidity</span></li>
+                            </div>
+                        </div>
+                        <div class="col-2 card">
+                            <div id="fourth-day" class="card-body">
+                                <p id="date">Example Date</p>
+                                <img></img>
+                                <li>Temp: <span id="temp">Example Temp</span></li>
+                                <li>Wind: <span id="wind">Example Wind</span></li>
+                                <li>Temp: <span id="hum">Example Humidity</span></li>
+                            </div>
+                        </div>
+                        <div class="col-2 card">
+                            <div id="fifth-day" class="card-body">
+                                <p id="date">Example Date</p>
+                                <img></img>
+                                <li>Temp: <span id="temp">Example Temp</span></li>
+                                <li>Wind: <span id="wind">Example Wind</span></li>
+                                <li>Temp: <span id="hum">Example Humidity</span></li>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- Five Day Forecast Section Ends-->
         </section>
     </main>

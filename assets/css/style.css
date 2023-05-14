@@ -1,0 +1,24 @@
+/* Sets layout and font family for the body element */
+body {
+	margin: 0;
+	padding: 0;
+	background-color: #ffffff;
+	font-family: 'Courier New', Courier, monospace, sans-serif;
+}
+
+/* Sets styling for header for the header element */
+header {
+	background-color: #000000;
+	color: #ffffff;
+	display: flex;
+	justify-content: space-around;
+	width: 100%;
+}
+
+section > div {
+    margin:10px;
+}
+
+li {
+    list-style: none;
+}
