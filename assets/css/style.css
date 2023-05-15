@@ -16,9 +16,9 @@ header {
 }
 
 section > div {
-    margin:10px;
+	margin: 10px;
 }
 
 li {
-    list-style: none;
+	list-style: none;
 }
