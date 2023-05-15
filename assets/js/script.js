@@ -98,7 +98,7 @@ clearButtonEl.addEventListener("click", function () {
 // Weather Fetch: fetch data with API and create elements for the current weather condition
 //-----------------------------------------------------------------------------------------------------------------------------//
 function weatherFetch(cityName) {
-    var queryURL = 'http://api.openweathermap.org/data/2.5/weather?q=' + cityName + "&appid=" + APIKey + '&units=metric';
+    var queryURL = 'https://api.openweathermap.org/data/2.5/weather?q=' + cityName + "&appid=" + APIKey + '&units=metric';
     fetch(queryURL)
         .then(function (response) {
             if (response.ok) {
@@ -140,7 +140,7 @@ function weatherFetch(cityName) {
 // Forecast Fetch: fetch forecast data with API for the next five days
 //-----------------------------------------------------------------------------------------------------------------------------//
 function forcastFetch(cityName) {
-    var queryURL = 'http://api.openweathermap.org/data/2.5/forecast?q=' + cityName + "&appid=" + APIKey + '&units=metric';
+    var queryURL = 'https://api.openweathermap.org/data/2.5/forecast?q=' + cityName + "&appid=" + APIKey + '&units=metric';
     fetch(queryURL)
         .then(function (response) {
             if (response.ok) {
