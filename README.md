@@ -19,7 +19,7 @@ The purpose of establishing this repository is to create a website that enables 
 ## Demonstration
 
 Here is a short demonstration of the website:
-![Demonstration of a user going through an interactive weather forecast dashboard that request for location sharing, searches for a city, displays weather forecast and starting over](To be recorded)
+![Demonstration of a user going through an interactive weather forecast dashboard that request for location sharing, searches for a city, displays weather forecast and starting over](./assets/images/Weather%20Dashboard.gif)
 
 <br>
 
