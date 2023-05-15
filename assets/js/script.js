@@ -10,6 +10,29 @@ var historyContainerEl = document.getElementById('history-container');
 var weatherContainerEl = document.getElementById('weather-container');
 var searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
 //-----------------------------------------------------------------------------------------------------------------------------//
+// Geo-Location: allow users to see weather and forecast of their city (This is just for fun, not a part of the challenge)
+//-----------------------------------------------------------------------------------------------------------------------------//
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function (position) {
+        var latitude = position.coords.latitude;
+        var longitude = position.coords.longitude;
+        console.log("Latitude: " + latitude + " Longitude: " + longitude);
+        var queryURL = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + latitude + "&lon=" + longitude + '&appid=' + APIKey;
+        fetch(queryURL)
+            .then(function (response) {
+                if (response.ok) {
+                    response.json().then(function (data) {
+                        console.log(data);
+                        var city = data.city.name;
+                        runData(city);
+                    })
+                }
+            })
+    });
+} else {
+    console.log("Geolocation is not supported by this browser.");
+}
+//-----------------------------------------------------------------------------------------------------------------------------//
 // Render History: call the create button function to create the buttons that are stored in the local storage
 //-----------------------------------------------------------------------------------------------------------------------------//
 function renderHistory() {
