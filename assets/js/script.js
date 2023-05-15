@@ -114,13 +114,16 @@ function weatherFetch(cityName) {
             }
         })
 }
-
+//-----------------------------------------------------------------------------------------------------------------------------//
+// Forecast Fetch: fetch forecast data with API for the next five days
+//-----------------------------------------------------------------------------------------------------------------------------//
 function forcastFetch(cityName) {
     var queryURL = 'http://api.openweathermap.org/data/2.5/forecast?q=' + cityName + "&appid=" + APIKey + '&units=metric';
     fetch(queryURL)
         .then(function (response) {
             if (response.ok) {
                 response.json().then(function (data) {
+                    console.log(data);
                     // Create elements for the forecast container
                     var forecastCardContainer = document.createElement('div');
                     var forecastCard = document.createElement('div');
@@ -141,9 +144,9 @@ function forcastFetch(cityName) {
                     weatherContainerEl.append(forecastCardContainer);
 
                     // For loop for creating the elements and data for the 5 day forecast 
-                    for (var x = 0; x < 5; x++) {
+                    for (var x = 0; x < data.list.length; x += 8) {
                         var unix = data.list[x].dt_txt
-                        var date = dayjs(unix).format('MMMM D, YYYY');
+                        var date = dayjs(unix).format('MMMM D');
                         var dayContainer = document.createElement('div');
                         var dayBody = document.createElement('div');
                         var dayTitle = document.createElement('h4');
@@ -158,8 +161,8 @@ function forcastFetch(cityName) {
                         dayIcon.setAttribute('src', iconURL + data.list[x].weather[0].icon + '.png');
 
                         // Modify text content with data
-                        dayTitle.textContent = ' (' + date + ')';
-                        dayTemp.textContent = 'Temperature: ' + data.list[x].main.temp + '°C';
+                        dayTitle.textContent = date;
+                        dayTemp.textContent = 'Temp: ' + data.list[x].main.temp + '°C';
                         dayWind.textContent = 'Wind: ' + data.list[x].wind.speed + ' m/s';
                         dayHum.textContent = 'Humidity: ' + data.list[x].main.humidity + '%';
 
@@ -173,10 +176,8 @@ function forcastFetch(cityName) {
                 console.log('blank input or non-existent city');
             }
         })
-
 }
-
 //-----------------------------------------------------------------------------------------------------------------------------//
-// Event Listeners
+// Event Listener
 //-----------------------------------------------------------------------------------------------------------------------------//
 cityFormEl.addEventListener('submit', formHandler);
