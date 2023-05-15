@@ -16,7 +16,6 @@ if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function (position) {
         var latitude = position.coords.latitude;
         var longitude = position.coords.longitude;
-        console.log("Latitude: " + latitude + " Longitude: " + longitude);
         var queryURL = 'https://api.openweathermap.org/data/2.5/forecast?lat=' + latitude + "&lon=" + longitude + '&appid=' + APIKey;
         fetch(queryURL)
             .then(function (response) {
